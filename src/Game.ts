@@ -35,15 +35,15 @@ export default class Game extends GameWithLoop {
 
     protected draw(): void {
         this.render.clear();
-        const step = 2 * Math.PI / 360;
-        for (let a = step; a < 2 * Math.PI; a += step) {
+        const step = 2 * Math.PI / (360 * 2);
+        for (let a = 0; a < 2 * Math.PI; a += step) {
             const ray = new Ray(this.playerPosition.copy(), new vec2([Math.cos(a), Math.sin(a)]));
 
             let distance = ray.getNearestIntersection(this.walls);
 
             if(distance) {
                 const lineEnd = new vec2([this.playerPosition.x + Math.cos(a) * distance, this.playerPosition.y + Math.sin(a) * distance]);
-                this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFFAA");
+                this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF22");
             }
         }
 

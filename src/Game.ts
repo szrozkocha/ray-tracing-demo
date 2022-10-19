@@ -18,6 +18,8 @@ export default class Game extends GameWithLoop {
       new Wall(new vec2([WIDTH, 0]), new vec2([WIDTH, HEIGHT])),
       new Wall(new vec2([WIDTH, HEIGHT]), new vec2([0, HEIGHT])),
       new Wall(new vec2([0, HEIGHT]), new vec2([0, 0])),
+      new Wall(new vec2([100, 100]), new vec2([200, 200])),
+      new Wall(new vec2([300, 100]), new vec2([500, 200])),
     ]
 
     constructor(private render: Render, private inputManager: InputManager) {

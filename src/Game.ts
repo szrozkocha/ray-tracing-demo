@@ -10,8 +10,8 @@ const WIDTH = 800;
 const HEIGHT = 600;
 
 export default class Game extends GameWithLoop {
-    private playerPosition: vec2 = new vec2([100, 50]);
-    private playerSpeed = 1;
+    private playerPosition: vec2 = new vec2([450, 550]);
+    private playerSpeed = 2;
 
     private walls = [
       new Wall(new vec2([0, 0]), new vec2([WIDTH, 0])),
@@ -56,15 +56,15 @@ export default class Game extends GameWithLoop {
 
     protected draw(): void {
         this.render.clear();
-        const step = 2 * Math.PI / (360 * 2);
-        for (let a = 0; a < 2 * Math.PI; a += step) {
+        const step = 2 * Math.PI / (360 * 5);
+        for (let a = step; a < 2 * Math.PI; a += step) {
             const ray = new Ray(this.playerPosition.copy(), new vec2([Math.cos(a), Math.sin(a)]));
 
             let distance = ray.getNearestIntersection(this.walls);
 
             if(distance) {
                 const lineEnd = new vec2([this.playerPosition.x + Math.cos(a) * distance, this.playerPosition.y + Math.sin(a) * distance]);
-                this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF22");
+                this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF08");
             }
         }
 

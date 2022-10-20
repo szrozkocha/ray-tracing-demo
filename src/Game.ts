@@ -69,5 +69,9 @@ export default class Game extends GameWithLoop {
         }
 
         this.render.drawCircle(this.playerPosition.x, this.playerPosition.y, 5, "#FFFFFFAA");
+
+        for (const wall of this.walls) {
+          this.render.drawLine(wall.getMidPoint(), wall.getMidPoint().add(wall.getNormal(this.playerPosition).multiply(new vec2([10, 10]))), "#FFFFFF")
+        }
     }
 }

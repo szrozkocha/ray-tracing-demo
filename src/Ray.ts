@@ -1,5 +1,5 @@
 import vec2 from "./engine/tsm/vec2";
-import Wall from "./engine/Wall";
+import Wall from "./Wall";
 
 export default class Ray {
   constructor(public start: vec2, public direction: vec2) {
@@ -28,20 +28,27 @@ export default class Ray {
   }
 
   getNearestIntersection(walls: Wall[]) {
-    let nearest = null;
+    let nearestDistance = null;
+    let nearestWall = null;
     for (const wall of walls) {
       let distance = this.getIntersection(wall.start, wall.end);
 
       if(distance) {
-        if(nearest == null) {
-          nearest = distance;
+        if(nearestDistance == null) {
+          nearestDistance = distance;
+          nearestWall = wall;
         }
-        else if(nearest > distance) {
-          nearest = distance;
+        else if(nearestDistance > distance) {
+          nearestDistance = distance;
+          nearestWall = wall;
         }
       }
     }
 
-    return nearest;
+    if(nearestDistance && nearestWall) {
+      return { distance: nearestDistance, wall: nearestWall };
+    } else {
+      return null;
+    }
   }
 }

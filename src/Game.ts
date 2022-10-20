@@ -3,7 +3,7 @@ import {Render} from "./engine/Render";
 import vec2 from "./engine/tsm/vec2";
 import InputManager from "./engine/InputManager";
 import Ray from "./Ray";
-import Wall from "./engine/Wall";
+import Wall from "./Wall";
 
 const FPS = 60;
 const WIDTH = 800;
@@ -57,15 +57,27 @@ export default class Game extends GameWithLoop {
     protected draw(): void {
         this.render.clear();
         const step = 2 * Math.PI / (360 * 5);
-        for (let a = step; a < 2 * Math.PI; a += step) {
+        for (let a = step * 100; a < 2 * Math.PI; a += step) {
             const ray = new Ray(this.playerPosition.copy(), new vec2([Math.cos(a), Math.sin(a)]));
 
-            let distance = ray.getNearestIntersection(this.walls);
+            let intersection = ray.getNearestIntersection(this.walls);
 
-            if(distance) {
-                const lineEnd = new vec2([this.playerPosition.x + Math.cos(a) * distance, this.playerPosition.y + Math.sin(a) * distance]);
-                this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF08");
+            if(intersection) {
+              const lineEnd = new vec2([this.playerPosition.x + Math.cos(a) * intersection.distance, this.playerPosition.y + Math.sin(a) * intersection.distance]);
+              //this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF08");
+              this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFFAA");
+
+              let reflectedRay = intersection.wall.getReflectedRay(ray.start, lineEnd);
+
+              let reflectedIntersection = reflectedRay.getNearestIntersection(this.walls);
+
+              if(reflectedIntersection) {
+                let lineEnd = reflectedRay.start.copy().add(reflectedRay.direction.copy().multiply(new vec2([reflectedIntersection.distance, reflectedIntersection.distance])));
+
+                this.render.drawLine(reflectedRay.start, lineEnd, "#FFFFFFAA");
+              }
             }
+            break;
         }
 
         this.render.drawCircle(this.playerPosition.x, this.playerPosition.y, 5, "#FFFFFFAA");

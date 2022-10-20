@@ -57,15 +57,14 @@ export default class Game extends GameWithLoop {
     protected draw(): void {
         this.render.clear();
         const step = 2 * Math.PI / (360 * 5);
-        for (let a = step * 100; a < 2 * Math.PI; a += step) {
+        for (let a = step; a < 2 * Math.PI; a += step) {
             const ray = new Ray(this.playerPosition.copy(), new vec2([Math.cos(a), Math.sin(a)]));
 
             let intersection = ray.getNearestIntersection(this.walls);
 
             if(intersection) {
               const lineEnd = new vec2([this.playerPosition.x + Math.cos(a) * intersection.distance, this.playerPosition.y + Math.sin(a) * intersection.distance]);
-              //this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF08");
-              this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFFAA");
+              this.render.drawLine(this.playerPosition, lineEnd, "#FFFFFF08");
 
               let reflectedRay = intersection.wall.getReflectedRay(ray.start, lineEnd);
 
@@ -74,16 +73,11 @@ export default class Game extends GameWithLoop {
               if(reflectedIntersection) {
                 let lineEnd = reflectedRay.start.copy().add(reflectedRay.direction.copy().multiply(new vec2([reflectedIntersection.distance, reflectedIntersection.distance])));
 
-                this.render.drawLine(reflectedRay.start, lineEnd, "#FFFFFFAA");
+                this.render.drawLine(reflectedRay.start, lineEnd, "#FFFFFF04");
               }
             }
-            break;
         }
 
         this.render.drawCircle(this.playerPosition.x, this.playerPosition.y, 5, "#FFFFFFAA");
-
-        for (const wall of this.walls) {
-          this.render.drawLine(wall.getMidPoint(), wall.getMidPoint().add(wall.getNormal(this.playerPosition).multiply(new vec2([10, 10]))), "#FFFFFF")
-        }
     }
 }
